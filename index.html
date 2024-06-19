@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Contenteditable Example</title>
+<style>
+  body {
+    font-family: Arial, sans-serif;
+    line-height: 1.6;
+    padding: 20px;
+  }
+  .editor {
+    border: 1px solid #ccc;
+    padding: 10px;
+    width: 100%;
+    min-height: 100px;
+    font-size: 16px;
+    outline: none; 
+  }
+  button {
+    display: block;
+    margin-top: 10px;
+    padding: 8px 16px;
+    background-color: #007bff;
+    color: #fff;
+    border: none;
+    cursor: pointer;
+  }
+  button:hover {
+    background-color: #0056b3;
+  }
+</style>
+</head>
+<body>
+
+<div class="editor" contenteditable="true">
+  This is an editable div. Select some text and click the button to turn it into a link.
+</div>
+<button onclick="makeLink()">Create Link</button>
+
+<script>
+function makeLink() {
+    let selection = window.getSelection();
+    if (selection.rangeCount > 0) {
+        let range = selection.getRangeAt(0);
+        if (range && !range.collapsed) {
+            let a = document.createElement('a');
+            let url = prompt("Enter the URL for the link (including http:// or https://):", "http://example.com");
+            if (url) {
+                a.href = url.trim();
+                a.target = "_blank"; 
+                a.textContent = range.toString(); 
+                range.deleteContents();
+                range.insertNode(a);
+                selection.removeAllRanges();
+            } else {
+                alert("Please enter a valid URL.");
+            }
+        }
+    } else {
+        alert("Please select some text.");
+    }
+}
+</script>
+
+</body>
+</html>
